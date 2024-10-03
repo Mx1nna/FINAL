@@ -19,15 +19,14 @@ let aiScore=0; // Ai score variable
 
 //Cookies Data
 tryLoadGame();
-showRollResult();
+updateScoreOnPage(); // this shows tha value from cookies
 
 // Page load
 // Button Pressed
 button0.addEventListener("click", function(){
-rollAiAndPlayer();
-  showRollResult();     // Then display the rolls
-  showPlayerScoreResult(); // show the updated score
-  showAIScoreResult();    // show the updated scores
+rollAiAndPlayer(); // Roll the dice dor both player and Ai
+  showRollResult();
+  updateScoreOnPage();    // show the updated scores
   compareRolls();       // Compare the rolls first
   saveGame();
 });
@@ -36,6 +35,7 @@ rollAiAndPlayer();
 function rollAiAndPlayer(){
 playerRollValue = getRandomNumberInt();
 aiRollValue = getRandomNumberInt();
+
 }
 
 function getRandomNumberInt() {
@@ -46,50 +46,47 @@ function getRandomNumberInt() {
 // View
 
 function showRollResult(){
-  playerRollText.innerHTML=playerRollValue;
-  aiRollText.innerHTML=aiRollValue;
+  playerRollText.innerHTML=playerRollValue; // shows players roll
+  aiRollText.innerHTML=aiRollValue; // shows Ai roll
 
 }
-function showPlayerScoreResult(){
-  playerScoreText.innerHTML=playerScore;// Update player score in the HTML
-}
-function showAIScoreResult(){
+function updateScoreOnPage(){
+  playerScoreText.innerHTML=playerScore;// Update
   aiScoreText.innerHTML=aiScore; // Update AI score in the HTML
 }
   function compareRolls() {
-    if (playerRollValue < aiRollValue) {
+    if (playerRollValue > aiRollValue) {
       playerScore++;//player wins this round
-      resultText.innerText = ("Player Wins!!");
+      resultText.innerHTML = "Player Wins!!";
     }
-    else if (aiRollValue < playerRollValue){
+    else if (aiRollValue > playerRollValue){
       aiScore++;// Ai wins this round
-      resultText.innerText = ("Ai Wins!!");
+      resultText.innerHTML = "Ai Wins!!";
     }
     else{
-      resultText.innerText = ("It's a draw!");
+      resultText.innerHTML = "It's a draw!";
     }
   }
 
   function saveGame(){
-  document.cookie= ("playerScore="+playerScore+ ";expires=MON,13 DEC 2025 12:00:00 UCT");
-    document.cookie= ("aiScore="+aiScore+";expires=MON,13 DEC 2025 12:00:00 UCT");
+  document.cookie= "playerScore="+ playerScore + ";expires=MON,13 DEC 2025 12:00:00 UTC";
+    document.cookie= "aiScore="+ aiScore +";expires=MON,13 DEC 2025 12:00:00 UTC";
   }
 function tryLoadGame(){
   playerScore = getCookie("playerScore");
 aiScore = getCookie("aiScore");
 }
+// cookie name
 function getCookie(cname) {
   let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
+  let decodedCookie = decodeURIComponent(document.cookie);  // Decode cookies to handle special characters
   let ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) === ' ') {
-      c = c.substring(1);
-    }
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i].trim();
     if (c.indexOf(name) === 0) {
-      return c.substring(name.length, c.length);
+      return c.substring(name.length, c.length);  // Return the cookie value
     }
   }
-  return 0;
+  return 0;  // Return 0 if cookie is not found
 }
+
